@@ -11,18 +11,19 @@ import WeatherBlock from "./components/WeatherBlock.vue";
   </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 .page {
   width: 100%;
-
-  padding: 10px 80px;
+  display: flex;
+  flex-direction: column;
+  margin: 50px;
 }
 
 p {
   display: flex;
   justify-content: center;
   font-size: 40px;
-  margin: 10px auto;
+  margin: 0 auto;
 }
 
 .weather-forecast {
