@@ -1,21 +1,38 @@
 <script setup lang="ts">
+import type { WeatherForecast } from "../types/weather-types";
+import { useWeatherStore } from "../stores/useWeatherStore";
 
+const props = defineProps<{
+  forecast: WeatherForecast;
+}>();
 
+const weatherStore = useWeatherStore();
 </script>
 
 <template>
   <div class="weather">
     <div class="info">
-      <p class="info__celsius">19°</p>
+      <p class="info__celsius">{{ forecast.temperature }}°</p>
       <p class="info__information">
-        <span class="info__information__temperature">H:24° L:18°</span><br>
-        <span class="info__information__town">Tbilisi, Georgia</span>
+        <span class="info__information__temperature"
+          >H:{{ forecast.maxTemp }}° L:{{ forecast.minTemp }}°</span
+        ><br />
+        <span class="info__information__town">Tbilisi, Georgia</span><br />
+        <span class="info__information__week-day">{{ forecast.weekDay }}</span>
       </p>
     </div>
 
     <div class="forecast">
-      <img class="forecast__image" src="../assets/cloud.svg" alt="">
-      <p class="forecast__forecast-info">Mid Rain</p>
+      <img
+        class="forecast__image"
+        :src="`/src/assets/${weatherStore.getWeatherIcon(
+          forecast.weatherCode
+        )}`"
+        :alt="weatherStore.getWeatherDescription(forecast.weatherCode)"
+      />
+      <p class="forecast__forecast-info">
+        {{ weatherStore.getWeatherDescription(forecast.weatherCode) }}
+      </p>
     </div>
   </div>
 </template>
@@ -50,7 +67,7 @@
     text-underline-position: from-font;
     text-decoration-skip-ink: none;
 
-    margin-bottom: 24px;
+    margin-bottom: 20px;
   }
 
   &__information {
@@ -64,11 +81,11 @@
     text-decoration-skip-ink: none;
 
     &__temperature {
-      color: #EBEBF599
+      color: #ebebf599;
     }
 
     &__town {
-      color: #FFFFFF;
+      color: #ffffff;
     }
   }
 }
@@ -78,7 +95,7 @@
   margin: -23px 4px 20px 0px;
 
   &__forecast-info {
-    color: #FFFFFF;
+    color: #ffffff;
     font-family: SF Pro Text;
     font-size: 13px;
     font-weight: 400;

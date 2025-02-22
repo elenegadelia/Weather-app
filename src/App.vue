@@ -1,12 +1,26 @@
 <script setup lang="ts">
+import { onMounted } from "vue";
 import WeatherBlock from "./components/WeatherBlock.vue";
+import { useWeatherStore } from "./stores/useWeatherStore";
+
+const weatherStore = useWeatherStore();
+
+onMounted(async () => {
+  await weatherStore.fetchForecasts();
+});
 </script>
 
 <template>
   <div class="page">
     <p>Weather Forecast</p>
-    <div class="weather-forecast">
-      <WeatherBlock v-for="index in 7" :key="index" />
+    <div v-if="weatherStore.isLoading">Loading...</div>
+    <div v-else-if="weatherStore.error">{{ weatherStore.error }}</div>
+    <div v-else class="weather-forecast">
+      <WeatherBlock
+        v-for="forecast in weatherStore.forecasts"
+        :key="forecast.date"
+        :forecast="forecast"
+      />
     </div>
   </div>
 </template>
